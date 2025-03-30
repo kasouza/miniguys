@@ -7,6 +7,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(LIB_NAME lib_${PROJECT_NAME})
 set(TEST_NAME test_${PROJECT_NAME})
 
+set(RENDERER_DRIVER "sdl" CACHE STRING "Some user-specified option")
+
 # Add vendor submodules
 add_subdirectory(vendor/sdl)
 add_subdirectory(vendor/sdl_image)
@@ -16,13 +18,26 @@ file(COPY ${PROJECT_SOURCE_DIR}/assets DESTINATION ${PROJECT_BINARY_DIR})
 file(COPY ${PROJECT_SOURCE_DIR}/miniguys/shaders DESTINATION ${PROJECT_BINARY_DIR})
 
 # Main library
+set(${LIB_NAME}_sources
+    miniguys/renderer/sdl/sdl_renderer.c
+    miniguys/event/event.c
+    miniguys/input/input.c
+)
+
+if(RENDERER STREQUAL "sdl")
+    list(APPEND ${LIB_NAME}_sources miniguys/renderer/sdl/sdl_renderer.c)
+endif()
+
+# Print source fieles
+message(STATUS "Sources: ${${LIB_NAME}_sources}")
+
 add_library(
     ${LIB_NAME} STATIC
-
-    miniguys/saske.c
+    ${${LIB_NAME}_sources}
 )
 
 target_compile_features(${LIB_NAME} PRIVATE c_std_17)
+target_include_directories(${LIB_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
 target_link_libraries(${LIB_NAME} PUBLIC SDL3::SDL3 SDL3_image::SDL3_image)
 
 # Executable
@@ -40,7 +55,6 @@ add_executable(
     ${TEST_NAME}
 
     miniguys/test.c
-    miniguys/saske.test.c
 )
 
 target_compile_features(${TEST_NAME} PRIVATE c_std_17)
