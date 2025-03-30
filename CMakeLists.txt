@@ -23,7 +23,7 @@ add_library(
 )
 
 target_compile_features(${LIB_NAME} PRIVATE c_std_17)
-target_link_libraries(${LIB_NAME} PUBLIC SDL3::SDL3)
+target_link_libraries(${LIB_NAME} PUBLIC SDL3::SDL3 SDL3_image::SDL3_image)
 
 # Executable
 add_executable(
