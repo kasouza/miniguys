@@ -7,9 +7,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(LIB_NAME lib_${PROJECT_NAME})
 set(TEST_NAME test_${PROJECT_NAME})
 
-# Find packages with VCPKG
-find_package(glad CONFIG REQUIRED)
-find_package(glfw3 CONFIG REQUIRED)
+# Add vendor submodules
+add_subdirectory(vendor/sdl)
+add_subdirectory(vendor/sdl_image)
 
 # Setup static files
 file(COPY ${PROJECT_SOURCE_DIR}/assets DESTINATION ${PROJECT_BINARY_DIR})
@@ -23,7 +23,7 @@ add_library(
 )
 
 target_compile_features(${LIB_NAME} PRIVATE c_std_17)
-target_link_libraries(${LIB_NAME} PUBLIC glad::glad glfw)
+target_link_libraries(${LIB_NAME} PUBLIC SDL3::SDL3)
 
 # Executable
 add_executable(
