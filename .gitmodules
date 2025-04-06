@@ -19,3 +19,6 @@
 [submodule "vendor/sdl_image"]
 	path = vendor/sdl_image
 	url = https://github.com/libsdl-org/SDL_image.git
+[submodule "vendor/klib"]
+	path = vendor/klib
+	url = git@github.com:kasouza/klib.git

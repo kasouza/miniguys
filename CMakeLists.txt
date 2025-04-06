@@ -12,6 +12,7 @@ set(RENDERER_DRIVER "sdl" CACHE STRING "Some user-specified option")
 # Add vendor submodules
 add_subdirectory(vendor/sdl)
 add_subdirectory(vendor/sdl_image)
+add_subdirectory(vendor/klib)
 
 # Setup static files
 file(COPY ${PROJECT_SOURCE_DIR}/assets DESTINATION ${PROJECT_BINARY_DIR})
@@ -38,7 +39,7 @@ add_library(
 
 target_compile_features(${LIB_NAME} PRIVATE c_std_17)
 target_include_directories(${LIB_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(${LIB_NAME} PUBLIC SDL3::SDL3 SDL3_image::SDL3_image)
+target_link_libraries(${LIB_NAME} PUBLIC SDL3::SDL3 SDL3_image::SDL3_image lib_klib)
 
 # Executable
 add_executable(

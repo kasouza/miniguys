@@ -1,6 +1,7 @@
 #include "SDL3/SDL_render.h"
 #include "SDL3/SDL_video.h"
 #include "miniguys/event/event.h"
+#include "miniguys/input/input.h"
 #include "miniguys/renderer/renderer.h"
 
 #include <SDL3/SDL.h>
@@ -15,7 +16,6 @@ int main() {
     if (event_context == NULL) {
         return 1;
     }
-    SDLK_LEFT;
 
     mg_WindowContext *window_context = mg_renderer_init(event_context);
     if (window_context == NULL) {
