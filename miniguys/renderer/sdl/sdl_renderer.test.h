@@ -1,6 +1,8 @@
 #ifndef KASOUZA_RENDERER_SDL_SDL_RENDERER_TEST_H
 #define KASOUZA_RENDERER_SDL_SDL_RENDERER_TEST_H
 
-void mg_testsuite_sdl_renderer();
+#include "miniguys/renderer/renderer.h"
+
+void mg_testsuite_sdl_renderer(mg_WindowContext *window_context);
 
 #endif

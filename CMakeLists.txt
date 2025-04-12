@@ -22,6 +22,7 @@ file(COPY ${PROJECT_SOURCE_DIR}/miniguys/shaders DESTINATION ${PROJECT_BINARY_DI
 set(${LIB_NAME}_sources
     miniguys/debug.c
     miniguys/renderer/sdl/sdl_renderer.c
+    miniguys/renderer/sprite.c
     miniguys/event/event.c
     miniguys/input/input.c
 )
@@ -55,6 +56,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${LIB_NAME})
 # Test executable
 set(test_sources
     miniguys/test.c
+
+    miniguys/renderer/sprite.test.c
 )
 
 if(RENDERER_DRIVER STREQUAL "sdl")

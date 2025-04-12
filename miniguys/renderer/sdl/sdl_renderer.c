@@ -2,11 +2,13 @@
 #include "SDL3/SDL_error.h"
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_keycode.h"
+#include "SDL3/SDL_rect.h"
 #include "SDL3/SDL_render.h"
 #include "SDL3_image/SDL_image.h"
 #include "miniguys/debug.h" // IWYU pragma: keep
 #include "miniguys/event/event.h"
 #include "miniguys/input/input.h"
+#include "miniguys/math/math.h"
 #include "miniguys/math/vec2f.h"
 #include "miniguys/renderer/renderer.h"
 
@@ -68,22 +70,26 @@ void mg_renderer_poll_events(mg_WindowContext *context) {
     }
 }
 
-void mg_renderer_render(mg_WindowContext *context, float x, float y) {
+void mg_renderer_clear(mg_WindowContext *context) {
     assert(context != NULL);
     assert(context->window != NULL);
     assert(context->renderer != NULL);
 
-    SDL_SetRenderDrawColor(context->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(context->renderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(context->renderer);
+}
 
-    SDL_FRect rect = {.x = x, .y = y, .w = 32, .h = 32};
-    SDL_SetRenderDrawColor(context->renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRect(context->renderer, &rect);
+void mg_renderer_present(mg_WindowContext *context) {
+    assert(context != NULL);
+    assert(context->window != NULL);
+    assert(context->renderer != NULL);
 
     SDL_RenderPresent(context->renderer);
 }
 
 void mg_renderer_terminate(mg_WindowContext *context) {
+    SDL_Quit();
+
     assert(context != NULL);
     free(context);
 }
@@ -1170,3 +1176,29 @@ void mg_texture_free(mg_Texture *texture) {
 }
 
 mg_Vec2f mg_texture_get_size(mg_Texture *texture) { return texture->size; }
+
+void mg_render_sprite(mg_WindowContext *context, const mg_Sprite *sprite) {
+    assert(context != NULL);
+    assert(context->renderer != NULL);
+    assert(sprite != NULL);
+    assert(sprite->texture != NULL);
+    assert(sprite->size.x > 0 && sprite->size.y > 0);
+
+    SDL_FRect rect = {
+        .x = sprite->position.x,
+        .y = sprite->position.y,
+        .w = sprite->size.x,
+        .h = sprite->size.y,
+    };
+
+    SDL_FPoint pivot = {
+        .x = sprite->rotation_pivot.x,
+        .y = sprite->rotation_pivot.y,
+    };
+
+    if (!SDL_RenderTextureRotated(
+            context->renderer, sprite->texture->sdl_texture, NULL, &rect,
+            mg_TO_DEGREES(sprite->rotation), &pivot, SDL_FLIP_NONE)) {
+        mg_LOG_ERROR("%s", SDL_GetError());
+    }
+}

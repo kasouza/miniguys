@@ -3,6 +3,7 @@
 #include "miniguys/event/event.h"
 #include "miniguys/input/input.h"
 #include "miniguys/renderer/renderer.h"
+#include "miniguys/renderer/sprite.h"
 
 #include <SDL3/SDL.h>
 
@@ -37,6 +38,10 @@ int main() {
     double target_fps = 60.0;
     double target_deltatime = 1.0 / target_fps;
 
+    mg_Sprite *sprite = mg_sprite_load(window_context, "assets/test/amogus_32x32.png");
+    sprite->rotation_pivot.x = sprite->size.x / 2;
+    sprite->rotation_pivot.y = sprite->size.y / 2;
+
     while (is_running) {
         now = SDL_GetTicks();
         Uint64 diff = now - last;
@@ -69,18 +74,23 @@ int main() {
         }
 
         if (mg_input_is_key_pressed(input_context, mg_Key_LEFT)) {
-            x -= 32 * deltatime;
+            sprite->position.x -= 32 * deltatime;
         } else if (mg_input_is_key_pressed(input_context, mg_Key_RIGHT)) {
-            x += 32 * deltatime;
+            sprite->position.x += 32 * deltatime;
         }
 
         if (mg_input_is_key_pressed(input_context, mg_Key_UP)) {
-            y -= 32 * deltatime;
+            sprite->position.y -= 32 * deltatime;
         } else if (mg_input_is_key_pressed(input_context, mg_Key_DOWN)) {
-            y += 32 * deltatime;
+            sprite->position.y += 32 * deltatime;
         }
 
-        mg_renderer_render(window_context, x, y);
+        sprite->rotation += deltatime;
+        printf("%f\n", sprite->rotation);
+        
+        mg_renderer_clear(window_context);
+        mg_render_sprite(window_context, sprite);
+        mg_renderer_present(window_context);
 
         double diff_in_seconds = diff / 1000.0;
         double delay_in_seconds = target_deltatime - diff_in_seconds;
@@ -89,6 +99,8 @@ int main() {
             SDL_Delay((Uint64)delay_in_seconds * 1000);
         }
     }
+
+    mg_sprite_free(sprite);
 
     mg_input_terminate(input_context);
     input_context = NULL;
