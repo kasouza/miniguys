@@ -11,7 +11,7 @@ bool test_test() {
 }
 
 int main() {
-    t_REGISTER_TEST(test_test);
+    t_TEST(test_test);
     testsuite_sdl_renderer();
 
     t_run_tests();

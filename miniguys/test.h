@@ -38,7 +38,7 @@ typedef struct {
     int tests_cap;
 } t_TestSuite;
 
-#define t_REGISTER_TEST(test) t_register_named_test(#test, test, NULL)
+#define t_TEST(test) t_register_named_test(#test, test, NULL)
 #define t_TS_TEST(testsuite, test) t_register_named_test(#test, test, testsuite)
 #define t_TESTSUITE(ts_name, _before_all, _after_all) t_register_testsuite((t_TestSuite){ .name=ts_name, .before_all = _before_all, .after_all = _after_all })
 
