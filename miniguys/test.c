@@ -13,7 +13,7 @@ bool test_test() {
 }
 
 int main() {
-    /*mg_should_log(false);*/
+    mg_should_log(false);
 
     t_TEST(test_test);
     mg_testsuite_sdl_renderer();

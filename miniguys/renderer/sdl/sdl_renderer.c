@@ -7,6 +7,7 @@
 #include "miniguys/debug.h" // IWYU pragma: keep
 #include "miniguys/event/event.h"
 #include "miniguys/input/input.h"
+#include "miniguys/math/vec2f.h"
 #include "miniguys/renderer/renderer.h"
 
 #include <SDL3/SDL_init.h>
@@ -1147,6 +1148,16 @@ mg_Texture *mg_texture_load(mg_WindowContext *context, const char *path) {
 
     texture->sdl_texture = sdl_texture;
 
+    if (!SDL_GetTextureSize(texture->sdl_texture, &texture->size.x,
+                            &texture->size.y)) {
+        SDL_DestroyTexture(sdl_texture);
+        free(texture);
+
+        mg_LOG_ERROR("%s", SDL_GetError());
+
+        return NULL;
+    }
+
     return texture;
 }
 
@@ -1157,3 +1168,5 @@ void mg_texture_free(mg_Texture *texture) {
     SDL_DestroyTexture(texture->sdl_texture);
     free(texture);
 }
+
+mg_Vec2f mg_texture_get_size(mg_Texture *texture) { return texture->size; }
