@@ -1,4 +1,6 @@
+#include "miniguys/debug.h"
 #include "miniguys/renderer/sdl/sdl_renderer.test.h"
+
 #define MAX_TESTS 1
 #define KASOUZA_TEST_IMPL
 
@@ -11,8 +13,10 @@ bool test_test() {
 }
 
 int main() {
+    /*mg_should_log(false);*/
+
     t_TEST(test_test);
-    testsuite_sdl_renderer();
+    mg_testsuite_sdl_renderer();
 
     t_run_tests();
 

@@ -1,6 +1,9 @@
 #include "sdl_renderer.h"
+#include "SDL3/SDL_error.h"
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_keycode.h"
+#include "SDL3/SDL_render.h"
+#include "SDL3_image/SDL_image.h"
 #include "miniguys/debug.h" // IWYU pragma: keep
 #include "miniguys/event/event.h"
 #include "miniguys/input/input.h"
@@ -10,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void handle_key_event(mg_WindowContext *context, SDL_KeyboardEvent *event);
 
@@ -18,7 +22,7 @@ mg_WindowContext *mg_renderer_init(mg_EventContext *event_context) {
 
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         const char *message = SDL_GetError();
-        fprintf(stderr, "Could not initialize SDL: %s\n", message);
+        mg_LOG_ERROR("Could not initialize SDL: %s\n", message);
 
         return NULL;
     }
@@ -31,7 +35,7 @@ mg_WindowContext *mg_renderer_init(mg_EventContext *event_context) {
     if (!SDL_CreateWindowAndRenderer("Saske", 800, 600, 0, &context->window,
                                      &context->renderer)) {
         const char *error = SDL_GetError();
-        fprintf(stderr, "Error creating SDL window and renderer %s\n", error);
+        mg_LOG_ERROR("Error creating SDL window and renderer %s\n", error);
 
         return NULL;
     }
@@ -1121,4 +1125,35 @@ void handle_key_event(mg_WindowContext *context, SDL_KeyboardEvent *event) {
         .key = {.type = mg_EventType_KEY, .key = key, .action = action}};
 
     mg_event_push(context->event_context, &mgEvent);
+}
+
+mg_Texture *mg_texture_load(mg_WindowContext *context, const char *path) {
+    assert(context != NULL);
+    assert(context->renderer != NULL);
+    assert(path != NULL);
+
+    SDL_Texture *sdl_texture = IMG_LoadTexture(context->renderer, path);
+    if (sdl_texture == NULL) {
+        mg_LOG_ERROR("%s\n", SDL_GetError());
+        return NULL;
+    }
+
+    mg_Texture *texture = malloc(sizeof(mg_Texture));
+    if (texture == NULL) {
+        SDL_DestroyTexture(sdl_texture);
+        mg_LOG_ERROR("Failed to allocate memory for texture");
+        return NULL;
+    }
+
+    texture->sdl_texture = sdl_texture;
+
+    return texture;
+}
+
+void mg_texture_free(mg_Texture *texture) {
+    assert(texture != NULL);
+    assert(texture->sdl_texture != NULL);
+
+    SDL_DestroyTexture(texture->sdl_texture);
+    free(texture);
 }

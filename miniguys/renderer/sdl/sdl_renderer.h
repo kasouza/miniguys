@@ -11,4 +11,8 @@ typedef struct mg_window_context_t {
     SDL_Renderer *renderer;
 } mg_WindowContext;
 
+typedef struct mg_texture_t {
+    SDL_Texture *sdl_texture;
+} mg_Texture;
+
 #endif

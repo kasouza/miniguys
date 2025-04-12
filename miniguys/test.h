@@ -51,6 +51,9 @@ typedef struct {
         }                                                                      \
     } while (0)
 
+#define t_ASSERT_NULL(ptr) t_ASSERT(ptr == NULL)
+#define t_ASSERT_NOT_NULL(ptr) t_ASSERT(ptr != NULL)
+
 void t_register_named_test(const char *name, t_test_func test,
                            const char *testsuite_name);
 void t_register_testsuite(t_TestSuite testsuite);

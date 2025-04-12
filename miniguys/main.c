@@ -45,7 +45,6 @@ int main() {
         double fps = 1.0 / deltatime;
 
         last = now;
-        // TODO: map all sdl keys
         mg_renderer_poll_events(window_context);
 
         mg_Event event;
@@ -57,16 +56,16 @@ int main() {
                     break;
 
                 case mg_EventType_KEY:
-                    if (event.key.key == mg_Key_ESCAPE) {
-                        is_running = false;
-                    }
-
                     mg_input_handle_key_event(input_context, &event.key);
                     break;
 
                 default:
                     break;
             }
+        }
+
+        if (mg_input_is_key_pressed(input_context, mg_Key_ESCAPE)) {
+            is_running = false;
         }
 
         if (mg_input_is_key_pressed(input_context, mg_Key_LEFT)) {
