@@ -39,8 +39,8 @@ int main() {
     double target_deltatime = 1.0 / target_fps;
 
     mg_Sprite *sprite = mg_sprite_load(window_context, "assets/test/amogus_32x32.png");
-    sprite->rotation_pivot.x = sprite->size.x / 2;
-    sprite->rotation_pivot.y = sprite->size.y / 2;
+    sprite->pivot.x = sprite->size.x / 2;
+    sprite->pivot.y = sprite->size.y / 2;
 
     while (is_running) {
         now = SDL_GetTicks();

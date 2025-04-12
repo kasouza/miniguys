@@ -11,7 +11,7 @@ typedef struct mg_sprite_t {
     mg_Vec2f position;
     mg_Vec2f size;
 
-    mg_Vec2f rotation_pivot;
+    mg_Vec2f pivot;
 
     float rotation;
 } mg_Sprite;

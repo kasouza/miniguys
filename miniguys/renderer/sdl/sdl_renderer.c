@@ -1192,8 +1192,8 @@ void mg_render_sprite(mg_WindowContext *context, const mg_Sprite *sprite) {
     };
 
     SDL_FPoint pivot = {
-        .x = sprite->rotation_pivot.x,
-        .y = sprite->rotation_pivot.y,
+        .x = sprite->pivot.x,
+        .y = sprite->pivot.y,
     };
 
     if (!SDL_RenderTextureRotated(
