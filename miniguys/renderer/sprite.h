@@ -19,4 +19,10 @@ typedef struct mg_sprite_t {
 mg_Sprite *mg_sprite_load(mg_WindowContext *context, const char* path);
 void mg_sprite_free(mg_Sprite *sprite);
 
+void mg_sprite_set_position(mg_Sprite *sprite, mg_Vec2f pos);
+void mg_sprite_set_rotation(mg_Sprite *sprite, float rotation);
+void mg_sprite_set_pivot(mg_Sprite *sprite, mg_Vec2f pivot);
+
+mg_Vec2f mg_sprite_get_size(const mg_Sprite *sprite);
+
 #endif

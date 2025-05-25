@@ -37,3 +37,29 @@ void mg_sprite_free(mg_Sprite *sprite) {
     mg_texture_free(sprite->texture);
     free(sprite);
 }
+
+void mg_sprite_set_position(mg_Sprite *sprite, mg_Vec2f pos) {
+    assert(sprite != NULL);
+
+    sprite->position.x = pos.x;
+    sprite->position.y = pos.y;
+}
+
+void mg_sprite_set_rotation(mg_Sprite *sprite, float rotation) {
+    assert(sprite != NULL);
+
+    sprite->rotation = rotation;
+}
+
+void mg_sprite_set_pivot(mg_Sprite *sprite, mg_Vec2f pivot) {
+    assert(sprite != NULL);
+
+    sprite->pivot.x = pivot.x;
+    sprite->pivot.y = pivot.y;
+}
+
+mg_Vec2f mg_sprite_get_size(const mg_Sprite *sprite) {
+    assert(sprite != NULL);
+
+    return sprite->size;
+}

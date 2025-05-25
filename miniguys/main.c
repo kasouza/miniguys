@@ -1,16 +1,14 @@
-#include "SDL3/SDL_render.h"
-#include "SDL3/SDL_video.h"
 #include "miniguys/event/event.h"
 #include "miniguys/input/input.h"
+#include "miniguys/math/vec2f.h"
+#include "miniguys/player/player.h"
+#include "miniguys/player/player_renderer.h"
 #include "miniguys/renderer/renderer.h"
 #include "miniguys/renderer/sprite.h"
 
 #include <SDL3/SDL.h>
 
 #include <stdio.h>
-
-SDL_Window *s_window = NULL;
-SDL_Renderer *s_renderer = NULL;
 
 int main() {
     mg_EventContext *event_context = mg_event_init();
@@ -38,9 +36,12 @@ int main() {
     double target_fps = 60.0;
     double target_deltatime = 1.0 / target_fps;
 
-    mg_Sprite *sprite = mg_sprite_load(window_context, "assets/test/amogus_32x32.png");
-    sprite->pivot.x = sprite->size.x / 2;
-    sprite->pivot.y = sprite->size.y / 2;
+    mg_Player *player = mg_player_create();
+    mg_PlayerRenderer *player_renderer =
+        mg_player_renderer_create(window_context);
+
+    // TODO
+    //  - Abstrair o deltatime
 
     while (is_running) {
         now = SDL_GetTicks();
@@ -73,23 +74,25 @@ int main() {
             is_running = false;
         }
 
+        mg_Vec2f player_pos = mg_player_get_position(player);
+
         if (mg_input_is_key_pressed(input_context, mg_Key_LEFT)) {
-            sprite->position.x -= 32 * deltatime;
+            player_pos.x -= 32 * deltatime;
         } else if (mg_input_is_key_pressed(input_context, mg_Key_RIGHT)) {
-            sprite->position.x += 32 * deltatime;
+            player_pos.x += 32 * deltatime;
         }
 
         if (mg_input_is_key_pressed(input_context, mg_Key_UP)) {
-            sprite->position.y -= 32 * deltatime;
+            player_pos.y -= 32 * deltatime;
         } else if (mg_input_is_key_pressed(input_context, mg_Key_DOWN)) {
-            sprite->position.y += 32 * deltatime;
+            player_pos.y += 32 * deltatime;
         }
 
-        sprite->rotation += deltatime;
-        printf("%f\n", sprite->rotation);
-        
+        mg_player_set_position(player, player_pos);
+        mg_player_rotate(player, deltatime);
+
         mg_renderer_clear(window_context);
-        mg_render_sprite(window_context, sprite);
+        mg_player_renderer_render_player(player_renderer, player);
         mg_renderer_present(window_context);
 
         double diff_in_seconds = diff / 1000.0;
@@ -100,7 +103,11 @@ int main() {
         }
     }
 
-    mg_sprite_free(sprite);
+    mg_player_renderer_free(player_renderer);
+    player_renderer = NULL;
+
+    mg_player_free(player);
+    player = NULL;
 
     mg_input_terminate(input_context);
     input_context = NULL;

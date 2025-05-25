@@ -25,6 +25,8 @@ set(${LIB_NAME}_sources
     miniguys/renderer/sprite.c
     miniguys/event/event.c
     miniguys/input/input.c
+    miniguys/player/player.c
+    miniguys/player/player_renderer.c
 )
 
 if(RENDERER_DRIVER STREQUAL "sdl")
