@@ -2,7 +2,7 @@
 #include "miniguys/input/input.h"
 #include "miniguys/math/vec2f.h"
 #include "miniguys/player/player.h"
-#include "miniguys/player/player_renderer.h"
+#include "miniguys/renderer/player/player_renderer.h"
 #include "miniguys/renderer/renderer.h"
 
 #include <SDL3/SDL.h>

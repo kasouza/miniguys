@@ -1,4 +1,3 @@
-
 #include "miniguys/config/config.h"
 #include "miniguys/debug.h"
 #include "miniguys/input/input.h"
