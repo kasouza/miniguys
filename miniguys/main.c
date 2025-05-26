@@ -1,118 +1,39 @@
-#include "miniguys/event/event.h"
-#include "miniguys/input/input.h"
-#include "miniguys/math/vec2f.h"
-#include "miniguys/player/player.h"
-#include "miniguys/renderer/player/player_renderer.h"
-#include "miniguys/renderer/renderer.h"
+#include "miniguys/game/game.h"
 
 #include <SDL3/SDL.h>
 
 #include <stdio.h>
 
 int main() {
-    mg_EventContext *event_context = mg_event_init();
-    if (event_context == NULL) {
-        return 1;
-    }
+    mg_Game *game = mg_game_create();
 
-    mg_WindowContext *window_context = mg_renderer_init(event_context);
-    if (window_context == NULL) {
-        return 1;
-    }
+    mg_game_loop(game);
 
-    mg_InputContext *input_context = mg_input_init();
-    if (input_context == NULL) {
-        return 1;
-    }
+    mg_game_free(game);
+    game = NULL;
 
-    bool is_running = true;
+    /*Uint64 now = 0;*/
+    /*Uint64 last = SDL_GetTicks();*/
+    /*double target_fps = 60.0;*/
+    /*double target_deltatime = 1.0 / target_fps;*/
 
-    float x = 0;
-    float y = 0;
 
-    Uint64 now = 0;
-    Uint64 last = SDL_GetTicks();
-    double target_fps = 60.0;
-    double target_deltatime = 1.0 / target_fps;
+    /*while (is_running) {*/
+        /*now = SDL_GetTicks();*/
+        /*Uint64 diff = now - last;*/
 
-    mg_Player *player = mg_player_create();
-    mg_PlayerRenderer *player_renderer =
-        mg_player_renderer_create(window_context);
+        /*double deltatime = diff / 1000.0;*/
+        /*double fps = 1.0 / deltatime;*/
 
-    while (is_running) {
-        now = SDL_GetTicks();
-        Uint64 diff = now - last;
+        /*last = now;*/
 
-        double deltatime = diff / 1000.0;
-        double fps = 1.0 / deltatime;
+        /*double diff_in_seconds = diff / 1000.0;*/
+        /*double delay_in_seconds = target_deltatime - diff_in_seconds;*/
 
-        last = now;
-        mg_renderer_poll_events(window_context);
-
-        mg_Event event;
-
-        while (mg_event_poll(event_context, &event)) {
-            switch (event.type) {
-                case mg_EventType_WINDOW_CLOSE:
-                    is_running = false;
-                    break;
-
-                case mg_EventType_KEY:
-                    mg_input_handle_key_event(input_context, &event.key);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        if (mg_input_is_key_pressed(input_context, mg_Key_ESCAPE)) {
-            is_running = false;
-        }
-
-        mg_Vec2f dir;
-
-        if (mg_input_is_key_pressed(input_context, mg_Key_LEFT)) {
-            dir.x = -1;
-        } else if (mg_input_is_key_pressed(input_context, mg_Key_RIGHT)) {
-            dir.x = 1;
-        }
-
-        if (mg_input_is_key_pressed(input_context, mg_Key_UP)) {
-            dir.y = -1;
-        } else if (mg_input_is_key_pressed(input_context, mg_Key_DOWN)) {
-            dir.y = 1;
-        }
-
-        mg_vec2f_normalize(&dir);
-        mg_vec2f_scale(&dir, 32 * deltatime);
-
-        mg_player_move(player, dir);
-        mg_player_rotate(player, deltatime);
-
-        mg_renderer_clear(window_context);
-        mg_player_renderer_render_player(player_renderer, player);
-        mg_renderer_present(window_context);
-
-        double diff_in_seconds = diff / 1000.0;
-        double delay_in_seconds = target_deltatime - diff_in_seconds;
-
-        if (delay_in_seconds > 0) {
-            SDL_Delay((Uint64)delay_in_seconds * 1000);
-        }
-    }
-
-    mg_player_renderer_free(player_renderer);
-    player_renderer = NULL;
-
-    mg_player_free(player);
-    player = NULL;
-
-    mg_input_terminate(input_context);
-    input_context = NULL;
-
-    mg_renderer_terminate(window_context);
-    window_context = NULL;
+        /*if (delay_in_seconds > 0) {*/
+            /*SDL_Delay((Uint64)delay_in_seconds * 1000);*/
+        /*}*/
+    /*}*/
 
     return 0;
 }

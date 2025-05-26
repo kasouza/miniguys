@@ -21,13 +21,20 @@ file(COPY ${PROJECT_SOURCE_DIR}/miniguys/shaders DESTINATION ${PROJECT_BINARY_DI
 # Main library
 set(${LIB_NAME}_sources
     miniguys/debug.c
+
+    miniguys/renderer/player/player_renderer.c
     miniguys/renderer/sdl/sdl_renderer.c
     miniguys/renderer/sprite.c
+
     miniguys/event/event.c
+
     miniguys/input/input.c
+
     miniguys/math/vec2f.c
+
     miniguys/player/player.c
-    miniguys/player/player_renderer.c
+
+    miniguys/game/game.c
 )
 
 if(RENDERER_DRIVER STREQUAL "sdl")
