@@ -4,7 +4,6 @@
 #include "miniguys/player/player.h"
 #include "miniguys/player/player_renderer.h"
 #include "miniguys/renderer/renderer.h"
-#include "miniguys/renderer/sprite.h"
 
 #include <SDL3/SDL.h>
 
@@ -40,9 +39,6 @@ int main() {
     mg_PlayerRenderer *player_renderer =
         mg_player_renderer_create(window_context);
 
-    // TODO
-    //  - Abstrair o deltatime
-
     while (is_running) {
         now = SDL_GetTicks();
         Uint64 diff = now - last;
@@ -74,21 +70,24 @@ int main() {
             is_running = false;
         }
 
-        mg_Vec2f player_pos = mg_player_get_position(player);
+        mg_Vec2f dir;
 
         if (mg_input_is_key_pressed(input_context, mg_Key_LEFT)) {
-            player_pos.x -= 32 * deltatime;
+            dir.x = -1;
         } else if (mg_input_is_key_pressed(input_context, mg_Key_RIGHT)) {
-            player_pos.x += 32 * deltatime;
+            dir.x = 1;
         }
 
         if (mg_input_is_key_pressed(input_context, mg_Key_UP)) {
-            player_pos.y -= 32 * deltatime;
+            dir.y = -1;
         } else if (mg_input_is_key_pressed(input_context, mg_Key_DOWN)) {
-            player_pos.y += 32 * deltatime;
+            dir.y = 1;
         }
 
-        mg_player_set_position(player, player_pos);
+        mg_vec2f_normalize(&dir);
+        mg_vec2f_scale(&dir, 32 * deltatime);
+
+        mg_player_move(player, dir);
         mg_player_rotate(player, deltatime);
 
         mg_renderer_clear(window_context);

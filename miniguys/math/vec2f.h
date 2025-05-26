@@ -6,4 +6,8 @@ typedef struct mg_vec2f_t {
     float y;
 } mg_Vec2f;
 
+float mg_vec2f_length(mg_Vec2f vec);
+void mg_vec2f_normalize(mg_Vec2f *vec);
+void mg_vec2f_scale(mg_Vec2f *vec, float scalar);
+
 #endif

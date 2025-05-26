@@ -25,6 +25,7 @@ set(${LIB_NAME}_sources
     miniguys/renderer/sprite.c
     miniguys/event/event.c
     miniguys/input/input.c
+    miniguys/math/vec2f.c
     miniguys/player/player.c
     miniguys/player/player_renderer.c
 )
@@ -43,7 +44,7 @@ add_library(
 
 target_compile_features(${LIB_NAME} PRIVATE c_std_17)
 target_include_directories(${LIB_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(${LIB_NAME} PUBLIC SDL3::SDL3 SDL3_image::SDL3_image lib_klib)
+target_link_libraries(${LIB_NAME} PUBLIC SDL3::SDL3 SDL3_image::SDL3_image lib_klib m)
 
 # Executable
 add_executable(
