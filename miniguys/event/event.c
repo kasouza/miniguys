@@ -31,7 +31,7 @@ void mg_event_terminate(mg_EventContext *context) {
     free(context);
 }
 
-void mg_event_push(mg_EventContext *context, mg_Event *event) {
+void mg_event_push(mg_EventContext *context, const mg_Event *event) {
     assert(context != NULL && context->event_queue != NULL);
     assert(event != NULL);
 

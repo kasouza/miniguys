@@ -1,7 +1,9 @@
 #ifndef KASOUZA_MINIGUYS_EVENT_EVENT_H
 #define KASOUZA_MINIGUYS_EVENT_EVENT_H
 
-#include "miniguys/input/input.h"
+#include "miniguys/input/action.h"
+#include "miniguys/input/key.h"
+
 #include <stdbool.h>
 
 /** Event types */
@@ -9,6 +11,7 @@ typedef enum mg_event_type {
     mg_EventType_NONE = 0,
     mg_EventType_WINDOW_CLOSE,
     mg_EventType_KEY,
+    mg_EventType_MOUSE_MOTION,
     mg_EventType_COUNT
 } mg_EventType;
 
@@ -23,12 +26,19 @@ typedef struct mg_key_event_t {
     mg_Action action;
 } mg_KeyEvent;
 
+typedef struct mg_mouse_motion_event_t {
+    mg_EventType type;
+    float x;
+    float y;
+} mg_MouseMotionEvent;
+
 /** Union of all event types */
 typedef union {
     mg_EventType type;
 
     mg_WindowCloseEvent window_close;
     mg_KeyEvent key;
+    mg_MouseMotionEvent mouse_motion;
 } mg_Event;
 
 typedef struct mg_event_context_h {
@@ -40,7 +50,7 @@ typedef struct mg_event_context_h {
 mg_EventContext *mg_event_init();
 void mg_event_terminate(mg_EventContext *context);
 
-void mg_event_push(mg_EventContext *context, mg_Event *event);
+void mg_event_push(mg_EventContext *context, const mg_Event *event);
 bool mg_event_poll(mg_EventContext *context, mg_Event *event);
 
 #endif

@@ -19,6 +19,8 @@
 #include <string.h>
 
 void handle_key_event(mg_WindowContext *context, SDL_KeyboardEvent *event);
+void handle_mouse_motion_event(mg_WindowContext *context,
+                               SDL_MouseMotionEvent *event);
 
 mg_WindowContext *mg_renderer_init(mg_EventContext *event_context) {
     assert(event_context != NULL);
@@ -62,6 +64,10 @@ void mg_renderer_poll_events(mg_WindowContext *context) {
             case SDL_EVENT_KEY_UP:
             case SDL_EVENT_KEY_DOWN:
                 handle_key_event(context, &event.key);
+                break;
+
+            case SDL_EVENT_MOUSE_MOTION:
+                handle_mouse_motion_event(context, &event.motion);
                 break;
 
             default:
@@ -1201,4 +1207,16 @@ void mg_render_sprite(mg_WindowContext *context, const mg_Sprite *sprite) {
             mg_TO_DEGREES(sprite->rotation), &pivot, SDL_FLIP_NONE)) {
         mg_LOG_ERROR("%s", SDL_GetError());
     }
+}
+
+void handle_mouse_motion_event(mg_WindowContext *context,
+                               SDL_MouseMotionEvent *event) {
+    assert(context != NULL);
+    assert(event != NULL);
+
+    mg_event_push(
+        context->event_context,
+        &(mg_Event){.mouse_motion = {.type = mg_EventType_MOUSE_MOTION,
+                                     .x = event->x,
+                                     .y = event->y}});
 }

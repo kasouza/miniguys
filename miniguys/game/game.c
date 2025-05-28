@@ -104,6 +104,10 @@ void mg_game_handle_events(mg_Game *game, double deltatime) {
                 mg_input_handle_key_event(game->input_context, &event.key);
                 break;
 
+            case mg_EventType_MOUSE_MOTION:
+                printf("%f %f\n", event.mouse_motion.y, event.mouse_motion.y);
+                break;
+
             default:
                 break;
         }
