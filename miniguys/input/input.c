@@ -22,6 +22,12 @@ mg_InputContext *mg_input_init() {
     return context;
 }
 
+void mg_input_terminate(mg_InputContext *context) {
+    assert(context != NULL);
+
+    free(context);
+}
+
 void mg_input_handle_key_event(mg_InputContext *context, mg_KeyEvent *event) {
     assert(context != NULL);
     assert(event != NULL);
@@ -40,15 +46,14 @@ void mg_input_handle_mouse_motion_event(mg_InputContext *context,
     context->mouse_pos.y = event->y;
 }
 
-bool mg_input_is_key_pressed(mg_InputContext *context, mg_Key key) {
+bool mg_input_is_key_pressed(const mg_InputContext *context, mg_Key key) {
     assert(context != NULL);
     assert(key > mg_Key_FIRST && key < mg_Key_LAST);
 
     return context->pressed[key];
 }
 
-void mg_input_terminate(mg_InputContext *context) {
+mg_Vec2f mg_input_get_mouse_pos(const mg_InputContext *context) {
     assert(context != NULL);
-
-    free(context);
+    return context->mouse_pos;
 }

@@ -19,9 +19,9 @@ void mg_input_handle_key_event(mg_InputContext *context, mg_KeyEvent *event);
 void mg_input_handle_mouse_motion_event(mg_InputContext *context,
                                         const mg_MouseMotionEvent *event);
 
-bool mg_input_is_key_pressed(mg_InputContext *context, mg_Key key);
+bool mg_input_is_key_pressed(const mg_InputContext *context, mg_Key key);
 void mg_input_terminate(mg_InputContext *context);
 
-mg_Vec2f mg_input_get_mouse_pos(mg_InputContext *context);
+mg_Vec2f mg_input_get_mouse_pos(const mg_InputContext *context);
 
 #endif

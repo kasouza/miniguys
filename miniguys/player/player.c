@@ -2,6 +2,7 @@
 #include "miniguys/math/vec2f.h"
 #include "miniguys/renderer/sprite.h"
 
+#include <math.h>
 #include <stdlib.h>
 
 typedef struct mg_player_t {
@@ -60,4 +61,8 @@ void mg_player_rotate(mg_Player *player, double radians) {
 double mg_player_get_rotation(const mg_Player *player) {
     assert(player != NULL);
     return player->rotation;
+}
+
+void mg_player_set_direction(mg_Player *player, mg_Vec2f dir) {
+    player->rotation = atan2(dir.y, dir.x);
 }

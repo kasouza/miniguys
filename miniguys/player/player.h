@@ -16,6 +16,8 @@ void mg_player_move_y(mg_Player *player, double y_offset);
 void mg_player_rotate(mg_Player *player, double radians);
 double mg_player_get_rotation(const mg_Player *player);
 
+void mg_player_set_direction(mg_Player *player, mg_Vec2f dir);
+
 void mg_player_free(mg_Player *player);
 
 #endif

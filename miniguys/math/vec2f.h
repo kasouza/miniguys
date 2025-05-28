@@ -10,4 +10,6 @@ float mg_vec2f_length(mg_Vec2f vec);
 void mg_vec2f_normalize(mg_Vec2f *vec);
 void mg_vec2f_scale(mg_Vec2f *vec, float scalar);
 
+mg_Vec2f mg_vec2f_sub(mg_Vec2f a, mg_Vec2f b);
+
 #endif
