@@ -41,11 +41,8 @@ if(RENDERER_DRIVER STREQUAL "sdl")
     # SDL Renderer
     list(APPEND ${LIB_NAME}_sources miniguys/renderer/sdl/sdl_renderer.c)
 
-    # SDL Timer
-    list(APPEND ${LIB_NAME}_sources miniguys/timer/sdl/sdl_timer.c)
-
-    # SDL Delay
-    list(APPEND ${LIB_NAME}_sources miniguys/delay/sdl/sdl_delay.c)
+    # SDL Time
+    list(APPEND ${LIB_NAME}_sources miniguys/time/sdl/sdl_time.c)
 endif()
 
 # Print source fieles

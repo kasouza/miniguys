@@ -4,8 +4,7 @@
 #include "miniguys/player/player.h"
 #include "miniguys/renderer/player/player_renderer.h"
 #include "miniguys/renderer/renderer.h"
-#include "miniguys/timer/timer.h"
-#include "miniguys/delay/delay.h"
+#include "miniguys/time/time.h"
 
 #include <assert.h>
 #include <stdbool.h>
@@ -22,8 +21,6 @@ typedef struct mg_game_t {
 
     mg_PlayerRenderer *player_renderer;
     mg_Player *player;
-
-    mg_Timer *timer;
 } mg_Game;
 
 mg_Game *mg_game_create() {
@@ -55,12 +52,6 @@ mg_Game *mg_game_create() {
         return NULL;
     }
 
-    mg_Timer *timer = mg_timer_create();
-    ;
-    if (timer == NULL) {
-        return NULL;
-    }
-
     mg_Game *game = malloc(sizeof(*game));
 
     game->is_running = false;
@@ -71,8 +62,6 @@ mg_Game *mg_game_create() {
 
     game->player_renderer = player_renderer;
     game->player = player;
-
-    game->timer = timer;
 
     return game;
 }
@@ -94,9 +83,6 @@ void mg_game_free(mg_Game *game) {
 
     mg_event_terminate(game->event_context);
     game->event_context = NULL;
-
-    mg_timer_free(game->timer);
-    game->timer = NULL;
 
     free(game);
 }
@@ -163,20 +149,28 @@ void mg_game_loop(mg_Game *game) {
     game->is_running = true;
 
     int desired_fps = 60;
-    double desired_frame_time = 1.0 / desired_fps;
+    mg_time_t desired_frame_time = 1000 / desired_fps;
+
+    double deltatime = 0;
 
     while (game->is_running) {
-        double deltatime = desired_frame_time;
+        mg_time_t start = mg_time();
 
         mg_game_handle_events(game, deltatime);
         mg_game_update(game, deltatime);
         mg_game_render(game, deltatime);
 
-        double frametime = mg_timer_deltatime(game->timer);
-        double diff = desired_frame_time - frametime;;
+        // Frametime
+        mg_time_t end = mg_time();
+        mg_time_t frametime = end - start;
+
+        mg_time_t diff = desired_frame_time - frametime;
 
         if (diff > 0) {
-            mg_delay(diff * 1000);
+            mg_delay(diff);
         }
+
+        mg_time_t total_end = mg_time();
+        deltatime = (total_end - start) / 1000.0;
     }
 }
