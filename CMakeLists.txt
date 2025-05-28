@@ -33,6 +33,7 @@ set(${LIB_NAME}_sources
     miniguys/math/vec2f.c
 
     miniguys/player/player.c
+    miniguys/player/player_controller.c
 
     miniguys/game/game.c
 )
