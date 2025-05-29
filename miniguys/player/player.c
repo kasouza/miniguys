@@ -3,15 +3,21 @@
 #include "miniguys/renderer/sprite.h"
 
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 typedef struct mg_player_t {
     mg_Vec2f pos;
-    double rotation;
+    mg_Vec2f look_dir;
+
+    mg_Vec2f velocity;
+
+    float max_speed;
+    float decelaration_factor;
 } mg_Player;
 
 mg_Player *mg_player_create(mg_Sprite *sprite) {
-    mg_Player *player = malloc(sizeof(*player));
+    mg_Player *player = calloc(1, sizeof(*player));
     if (player == NULL) {
         mg_LOG_ERROR("Could not allocate memory for player");
         return NULL;
@@ -19,6 +25,15 @@ mg_Player *mg_player_create(mg_Sprite *sprite) {
 
     player->pos.x = 0;
     player->pos.y = 0;
+
+    player->look_dir.x = 1;
+    player->look_dir.y = 0;
+
+    player->velocity.x = 0;
+    player->velocity.y = 0;
+
+    player->max_speed = 8;
+    player->decelaration_factor = 0.9f;
 
     return player;
 }
@@ -53,16 +68,44 @@ void mg_player_move_y(mg_Player *player, double y_offset) {
     player->pos.y += y_offset;
 }
 
-void mg_player_rotate(mg_Player *player, double radians) {
+void mg_player_rotate(mg_Player *player, float radians) {
     assert(player != NULL);
-    player->rotation += radians;
+    mg_vec2f_rotate(&player->look_dir, radians);
 }
 
 double mg_player_get_rotation(const mg_Player *player) {
     assert(player != NULL);
-    return player->rotation;
+    return atan2(player->look_dir.y, player->look_dir.x);
 }
 
-void mg_player_set_direction(mg_Player *player, mg_Vec2f dir) {
-    player->rotation = atan2(dir.y, dir.x);
+void mg_player_set_look_direction(mg_Player *player, mg_Vec2f dir) {
+    assert(player != NULL);
+    player->look_dir = dir;
+}
+
+void mg_player_set_velocity(mg_Player *player, mg_Vec2f velocity) {
+    assert(player != NULL);
+    player->velocity = velocity;
+}
+
+mg_Vec2f mg_player_get_velocity(const mg_Player *player) {
+    assert(player != NULL);
+    return player->velocity;
+}
+
+void mg_player_apply_velocity(mg_Player *player) {
+    assert(player != NULL);
+
+    player->pos.x += player->velocity.x;
+    player->pos.y += player->velocity.y;
+}
+
+float mg_player_get_max_speed(const mg_Player *player) {
+    assert(player != NULL);
+    return player->max_speed;
+}
+
+float mg_player_get_decelaration_factor(const mg_Player *player) {
+    assert(player != NULL);
+    return player->decelaration_factor;
 }
