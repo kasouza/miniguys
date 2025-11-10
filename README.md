@@ -30,7 +30,7 @@ cmake --build build
         - [ ] Health
         - [ ] ...
 
-    - [ ] Player and enemy (would be interesting to implemente both the player and the enemy and a `king` or something, which would be controlled either by the player inputs or an AI) 
+    - [ ] Player and enemy (would be interesting to implemente both the player and the enemy as a `king` or something, which would be controlled either by the player inputs or an AI) 
 
     - [ ] Miniguys (all the miniguys are store in a big array and what defines their actual behaviour is which king they're related to and what they're currently doing)
         - [ ] Type 
